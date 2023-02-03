@@ -1,5 +1,7 @@
 # dont-serve-static-files
 
+Reference: https://calendar.perfplanet.com/2021/content-separation/
+
 ## Benchmark results
 
 ### App 0
