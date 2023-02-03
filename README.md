@@ -1,3 +1,5 @@
+# dont-serve-static-files
+
 ## Benchmark results
 
 ### App 0
@@ -146,4 +148,3 @@ Req/Bytes counts sampled once per second.
 
 1336k requests in 30.41s, 2.43 GB read
 ```
-# dont-serve-static-files
