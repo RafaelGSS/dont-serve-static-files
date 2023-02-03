@@ -9,54 +9,35 @@ Reference: https://calendar.perfplanet.com/2021/content-separation/
 Exposing Node.js server directly to the web
 
 ```console
-➜ autocannon -d 30 -c 1000 http://172.105.153.49:3000/
+rafaelgss@rafaelgss-desktop:~$ wrk2 -c1000 -d30s -R1000 http://172.105.153.49:3000/
 Running 30s test @ http://172.105.153.49:3000/
-1000 connections
+  2 threads and 1000 connections
+  Thread calibration: mean lat.: 369.440ms, rate sampling interval: 1135ms
+  Thread calibration: mean lat.: 540.130ms, rate sampling interval: 1350ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   241.94ms  456.32ms  15.54s    98.45%
+    Req/Sec   504.26     53.80   610.00     62.96%
+  28689 requests in 30.01s, 5.14MB read
+  Socket errors: connect 0, read 0, write 0, timeout 128
+Requests/sec:    956.08
+Transfer/sec:    175.53KB
+```
 
+Static files
 
-┌─────────┬────────┬────────┬────────┬────────┬──────────┬───────────┬─────────┐
-│ Stat    │ 2.5%   │ 50%    │ 97.5%  │ 99%    │ Avg      │ Stdev     │ Max     │
-├─────────┼────────┼────────┼────────┼────────┼──────────┼───────────┼─────────┤
-│ Latency │ 127 ms │ 131 ms │ 139 ms │ 158 ms │ 137.2 ms │ 106.61 ms │ 3447 ms │
-└─────────┴────────┴────────┴────────┴────────┴──────────┴───────────┴─────────┘
-┌───────────┬────────┬────────┬────────┬────────┬────────┬─────────┬────────┐
-│ Stat      │ 1%     │ 2.5%   │ 50%    │ 97.5%  │ Avg    │ Stdev   │ Min    │
-├───────────┼────────┼────────┼────────┼────────┼────────┼─────────┼────────┤
-│ Req/Sec   │ 1893   │ 1893   │ 3471   │ 3599   │ 3376.4 │ 338.78  │ 1893   │
-├───────────┼────────┼────────┼────────┼────────┼────────┼─────────┼────────┤
-│ Bytes/Sec │ 356 kB │ 356 kB │ 653 kB │ 677 kB │ 635 kB │ 63.7 kB │ 356 kB │
-└──────────┴────────┴────────┴────────┴────────┴────────┴─────────┴────────┘
-
-Req/Bytes counts sampled once per second.
-# of samples: 30
-
-104k requests in 30.09s, 19 MB read
-1k errors (1k timeouts)
-
-~ took 30.2s
-➜ autocannon -d 30 -c 1000 http://172.105.153.49:3000/public/index.html
+```console
+rafaelgss@rafaelgss-desktop:~$ wrk2 -c1000 -d30s -R1000 http://172.105.153.49:3000/public/index.html
 Running 30s test @ http://172.105.153.49:3000/public/index.html
-1000 connections
-
-
-┌─────────┬────────┬────────┬────────┬────────┬───────────┬──────────┬────────┐
-│ Stat    │ 2.5%   │ 50%    │ 97.5%  │ 99%    │ Avg       │ Stdev    │ Max    │
-├─────────┼────────┼────────┼────────┼────────┼───────────┼─────────┼────────┤
-│ Latency │ 129 ms │ 136 ms │ 165 ms │ 205 ms │ 141.81 ms │ 34.36 ms │ 900 ms │
-└─────────┴────────┴────────┴────────┴────────┴───────────┴──────────┴────────┘
-┌───────────┬─────────┬─────────┬─────────┬─────────┬─────────┬────────┬─────────┐
-│ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%   │ Avg     │ Stdev  │ Min     │
-├───────────┼─────────┼─────────┼─────────┼─────────┼─────────┼────────┼─────────┤
-│ Req/Sec   │ 1697    │ 1697    │ 3329    │ 3411    │ 3268.07 │ 298.48 │ 1697    │
-├───────────┼─────────┼─────────┼─────────┼─────────┼─────────┼────────┼─────────┤
-│ Bytes/Sec │ 3.19 MB │ 3.19 MB │ 6.25 MB │ 6.41 MB │ 6.14 MB │ 560 kB │ 3.19 MB │
-└───────────┴─────────┴─────────┴─────────┴─────────┴─────────┴────────┴─────────┘
-
-Req/Bytes counts sampled once per second.
-# of samples: 30
-
-100k requests in 30.09s, 184 MB read
-1k errors (1k timeouts)
+  2 threads and 1000 connections
+  Thread calibration: mean lat.: 172.798ms, rate sampling interval: 541ms
+  Thread calibration: mean lat.: 173.186ms, rate sampling interval: 544ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   153.31ms  385.01ms  15.61s    99.86%
+    Req/Sec   497.28     53.38   581.00     53.12%
+  28969 requests in 30.00s, 51.88MB read
+  Socket errors: connect 0, read 0, write 0, timeout 59
+Requests/sec:    965.51
+Transfer/sec:      1.73MB
 ```
 
 ### App1
@@ -64,57 +45,67 @@ Req/Bytes counts sampled once per second.
 Exposing Node.js app behind a nginx proxy and serving static files through the app.
 
 ```console
-➜ autocannon -d 30 -c 1000 http://172.105.153.49
-Running 30s test @ http://172.105.153.49
-1000 connections
+rafaelgss@rafaelgss-desktop:~$ wrk2 -c1000 -d30s -R1000 http://172.105.153.49/
+Running 30s test @ http://172.105.153.49/
+  2 threads and 1000 connections
+  Thread calibration: mean lat.: 149.224ms, rate sampling interval: 514ms
+  Thread calibration: mean lat.: 148.835ms, rate sampling interval: 307ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   151.07ms  413.88ms  15.50s    99.84%
+    Req/Sec   418.65     79.94   560.00     61.54%
+  24611 requests in 30.00s, 4.58MB read
+  Socket errors: connect 0, read 0, write 0, timeout 2020
+Requests/sec:    820.30
+Transfer/sec:    156.21KB
+```
 
+Static files
 
-┌─────────┬────────┬────────┬────────┬────────┬───────────┬──────────┬─────────┐
-│ Stat    │ 2.5%   │ 50%    │ 97.5%  │ 99%    │ Avg       │ Stdev    │ Max     │
-├─────────┼────────┼────────┼────────┼────────┼───────────┼──────────┼─────────┤
-│ Latency │ 127 ms │ 132 ms │ 152 ms │ 363 ms │ 137.27 ms │ 37.79 ms │ 1196 ms │
-└─────────┴────────┴────────┴────────┴────────┴───────────┴──────────┴─────────┘
-┌───────────┬─────┬──────┬────────┬────────┬─────────┬─────────┬───────┐
-│ Stat      │ 1%  │ 2.5% │ 50%    │ 97.5%  │ Avg     │ Stdev   │ Min   │
-├───────────┼─────┼──────┼────────┼────────┼─────────┼─────────┼───────┤
-│ Req/Sec   │ 0   │ 0    │ 3323   │ 3517   │ 2238.84 │ 1567.38 │ 2     │
-├───────────┼─────┼──────┼────────┼────────┼─────────┼─────────┼───────┤
-│ Bytes/Sec │ 0 B │ 0 B  │ 648 kB │ 686 kB │ 436 kB  │ 306 kB  │ 385 B │
-└───────────┴─────┴──────┴───────┴────────┴─────────┴─────────┴───────┘
-
-Req/Bytes counts sampled once per second.
-# of samples: 30
-
-70k requests in 30.08s, 13.1 MB read
-2k errors (2k timeouts)
-
-~ took 30.2s
-➜ autocannon -d 30 -c 1000 http://172.105.153.49/public/index.html
+```console
+rafaelgss@rafaelgss-desktop:~$ wrk2 -c1000 -d30s -R1000 http://172.105.153.49/public/index.html
 Running 30s test @ http://172.105.153.49/public/index.html
-1000 connections
-
-
-┌─────────┬────────┬────────┬────────┬────────┬──────────┬───────────┬──────────┐
-│ Stat    │ 2.5%   │ 50%    │ 97.5%  │ 99%    │ Avg      │ Stdev     │ Max      │
-├─────────┼────────┼────────┼────────┼────────┼──────────┼───────────┼──────────┤
-│ Latency │ 130 ms │ 148 ms │ 272 ms │ 514 ms │ 167.9 ms │ 265.82 ms │ 10117 ms │
-└─────────┴────────┴────────┴────────┴────────┴──────────┴───────────┴──────────┘
-┌───────────┬─────────┬─────────┬─────────┬────────┬─────────┬─────────┬─────────┐
-│ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%  │ Avg     │ Stdev   │ Min     │
-├───────────┼─────────┼─────────┼─────────┼────────┼─────────┼─────────┼─────────┤
-│ Req/Sec   │ 7       │ 7       │ 2919    │ 3131   │ 1915.27 │ 1352.64 │ 7       │
-├──────────┼─────────┼─────────┼─────────┼────────┼─────────┼─────────┼─────────┤
-│ Bytes/Sec │ 13.2 kB │ 13.2 kB │ 5.51 MB │ 5.9 MB │ 3.61 MB │ 2.55 MB │ 13.2 kB │
-└───────────┴─────────┴─────────┴─────────┴────────┴─────────┴─────────┴─────────┘
-
-Req/Bytes counts sampled once per second.
-# of samples: 30
-
-61k requests in 30.1s, 108 MB read
-2k errors (2k timeouts)
+  2 threads and 1000 connections
+  Thread calibration: mean lat.: 1058.468ms, rate sampling interval: 8888ms
+  Thread calibration: mean lat.: 669.167ms, rate sampling interval: 3733ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   285.02ms  597.46ms  15.61s    96.08%
+    Req/Sec   405.80     17.61   433.00     60.00%
+  24301 requests in 30.01s, 43.69MB read
+  Socket errors: connect 0, read 1, write 0, timeout 2222
+Requests/sec:    809.82
+Transfer/sec:      1.46MB
 ```
 
 ### App2
 
 ```console
+rafaelgss@rafaelgss-desktop:~$ wrk2 -c1000 -d30s -R1000 http://172.105.153.49/
+Running 30s test @ http://172.105.153.49/
+  2 threads and 1000 connections
+  Thread calibration: mean lat.: 711.841ms, rate sampling interval: 2682ms
+  Thread calibration: mean lat.: 714.438ms, rate sampling interval: 2635ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   307.84ms  727.57ms  15.68s    96.42%
+    Req/Sec   434.08     26.42   468.00     50.00%
+  25047 requests in 30.01s, 4.66MB read
+  Socket errors: connect 0, read 2, write 0, timeout 1866
+Requests/sec:    834.72
+Transfer/sec:    158.96KB
+```
+
+Static files
+
+```console
+rafaelgss@rafaelgss-desktop:~$ wrk2 -c1000 -d30s -R1000 http://172.105.153.49/public/index.html
+Running 30s test @ http://172.105.153.49/public/index.html
+  2 threads and 1000 connections
+  Thread calibration: mean lat.: 504.384ms, rate sampling interval: 2629ms
+  Thread calibration: mean lat.: 577.851ms, rate sampling interval: 2682ms
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.95s     4.00s   19.84s    85.65%
+    Req/Sec   453.83     44.89   489.00     83.33%
+  24431 requests in 30.00s, 42.66MB read
+  Socket errors: connect 0, read 1, write 0, timeout 2665
+Requests/sec:    814.28
+Transfer/sec:      1.42MB
 ```
