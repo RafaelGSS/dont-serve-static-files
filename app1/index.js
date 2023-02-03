@@ -1,6 +1,6 @@
 const path = require('path')
 const fastify = require('fastify')({
-  logger: true
+  logger: false
 })
 
 fastify.register(require('@fastify/static'), {
@@ -12,4 +12,5 @@ fastify.get('/', (req, reply) => {
   reply.send({ hello: 'world' })
 })
 
-fastify.listen({ port: 3000, host: '0.0.0.0' })
+// fastify.listen({ port: 3000, host: '0.0.0.0' })
+fastify.listen({ port: 3000 })
